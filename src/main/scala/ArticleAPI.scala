@@ -12,9 +12,11 @@ class ArticleAPI(service: ArticleService)(implicit system: ActorSystem) extends 
   def route(): Route = {
     path("articles") {
       get {
-        onComplete(service.getArticles()) {
-          case Success(result) => complete(result)
-          case Failure(ex) => complete(StatusCodes.InternalServerError -> s"An error occurred: ${ex.getMessage}")
+        parameter('page.as[Int]) { page =>
+          onComplete(service.getArticles(page)) {
+            case Success(result) => complete(result)
+            case Failure(ex) => complete(StatusCodes.InternalServerError -> s"An error occurred: ${ex.getMessage}")
+          }
         }
       }
     }~

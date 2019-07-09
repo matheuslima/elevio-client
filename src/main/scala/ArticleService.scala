@@ -13,8 +13,8 @@ trait ArticleJsonSupport extends SprayJsonSupport with DefaultJsonProtocol {
 }
 
 class ArticleService(client: ElevioAPIClient)(implicit ec: ExecutionContext, as: ActorSystem) extends ArticleJsonSupport {
-  def getArticles() = {
-    client.runRequest("articles", Seq(Query("status" -> "published"))).map{ response =>
+  def getArticles(page: Int) = {
+    client.runRequest("articles", Seq(Query("page" -> page.toString))).map{ response =>
       response.fields("articles") match {
         case JsArray(items) => items.map {
           case JsObject(obj) => obj("title") match {

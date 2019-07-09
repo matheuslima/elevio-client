@@ -45,8 +45,8 @@ class ArticleAPITest
 
   "The service" should {
     "return all articles for the GET request to the articles path" in {
-      (client.runRequest _).when("articles", Seq(Query("status" -> "published"))).returning(Future.successful(articles))
-      Get("/articles") ~> route ~> check {
+      (client.runRequest _).when("articles", Seq(Query("page" -> "1"))).returning(Future.successful(articles))
+      Get("/articles?page=1") ~> route ~> check {
         status shouldEqual StatusCodes.OK
         responseAs[Seq[Article]] should equal (articlesExpected)
       }
